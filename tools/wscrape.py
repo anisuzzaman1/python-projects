@@ -6,8 +6,10 @@ from urllib.request import urlopen
 from bs4 import BeautifulSoup
 
 # Global Variable ------------------ #
-urlGrab = "https://www.aljazeera.com/"
+# urlGrab = "https://www.aljazeera.com/"
 exportFile = "export/scapped.html"
+conversionType = "html.parser"
+listObj = ['h1', 'h2', 'h3', 'h4']
 # -------------------------- #
 
 
@@ -59,7 +61,18 @@ class urlScapper:
             self.__wlog__.report(e)
     # ------------------------------------ #
 
-    # If Need to change Url -------- #
+    # If Needed to change Url -------- #
     def change_url(self, url):
         self.__url__ = url
     # ---------------------------- #
+
+    def print_data(self):
+        print(self.__data__)
+
+    # BeautifulSoup Object Process -----#
+    def covert_to_bs4(self):
+        self.__soup__ = BeautifulSoup(self.__data__, conversionType)
+
+    def export_soup_file(self):
+        containList = self.__soup__.find_all(listObj)
+    # ------------------------------ #
