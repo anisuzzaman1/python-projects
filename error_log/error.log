@@ -1,0 +1,5 @@
+ERROR:root:
+Traceback (most recent call last):
+  File "/Users/anisuzzaman/projects/py-webscrapper-workshop/scrapper.py", line 13, in <module>
+    raise Exception
+Exception
