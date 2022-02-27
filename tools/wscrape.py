@@ -6,11 +6,14 @@ from urllib.request import urlopen
 from bs4 import BeautifulSoup
 
 # Global Variable ------------------ #
-urlGrab = "https://www.aljazeera.com/ "
+urlGrab = "https://bangladeshkantha.com/"
 exportFile = "export/scapped.html"
 exportFile2 = "export/scapped2.html"
 conversionType = "html.parser"
 listObj = ['h1', 'h2', 'h3', 'h4']
+
+
+# listObj = ['h3']
 
 
 # -------------------------- #
@@ -80,30 +83,30 @@ class UrlScappers:
 
     # BeautifulSoup Object Process -----#
     def covert_to_bs4(self):
-        self.__soup__ = BeautifulSoup(self.__data__, "html.parser")
+        self.__soup__ = BeautifulSoup(self.__data__, conversionType)
 
     def export_soup_file(self):
-        containList = self.__soup__.find_all(['h1', 'h2', 'h3', 'h4'])
-        print(containList)
+        global geturl
+        containList = self.__soup__.find_all(listObj)
+        # containList = self.__soup__.find_all("a", class_="jeg_post_title")
+        # print(len(containList))
 
-        htmltext = '''
-        <html>
-        <head><title>Export Scapped Data</title></head>
-        <body>
-            {SCRAP_LINK}
-        </body>
-        </html>
-        
-        '''
+        scrap_link = '<html><head><title>Export Scapped Data</title></head><body>'
+        scrap_link += '<ol>'
 
-        scrap_link = '<ol>'
         for tag in containList:
-            if tag.parent.get('href'):
-                link = self.__url__ + tag.parent.get('href')
-                title = tag.string
-                scrap_link += "<li><a href='{}' target=_blank>{}</a></li>\n"
-        scrap_link += '</ol>'
-        htmltext = htmltext.format(SCRAP_LINK=scrap_link)
+            getData = tag.prettify().strip()  # Output HTML
+            print(getData)
+            gettitle = tag.get_text().strip()  # Working
+            for link in tag.find_all('a'):  # Working
+                geturl = link.get('href')
 
-        self.export_url(filepath='export/final.html', data=htmltext.encode())
+            if len(gettitle) > 0:
+                # print(link)
+                scrap_link += "<li><a href='" + geturl + \
+                    "' target=_blank>" + gettitle + "</a></li>\n"
+        scrap_link += '</ol>'
+        scrap_link += '</body></html >'
+        # print(scrap_link)
+        self.export_url(filepath='export/final.html', data=scrap_link.encode())
     # ------------------------------ #
